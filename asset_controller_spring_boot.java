@@ -16,7 +16,7 @@ import java.util.Map;
 @CrossOrigin(origins = "*") // Permite peticiones desde el frontend HTML/JS
 public class AssetController {
 
-    // Estructura para las pistas de audio (música)
+    // Estructura para las pistas de audio (música de fondo)
     public static class Track {
         private String title;
         private String artist;
@@ -33,7 +33,7 @@ public class AssetController {
         public String getSrc() { return src; }
     }
 
-    // Estructura para la información del personaje en el selector
+    // Estructura para la información de cada personaje del selector
     public static class Character {
         private String id;
         private String name;
@@ -56,7 +56,7 @@ public class AssetController {
         public String getVoice() { return voice; }
     }
 
-    // Endpoint para la lista de reproducción (Música 0.mp3 a 4.mp3)
+    // Endpoint para la lista de reproducción (Música local 0.mp3 a 4.mp3)
     @GetMapping("/playlist")
     public ResponseEntity<List<Track>> getPlaylist() {
         List<Track> playlist = Arrays.asList(
@@ -69,30 +69,30 @@ public class AssetController {
         return ResponseEntity.ok(playlist);
     }
 
-    // Endpoint para efectos de sonido (SFX: A.mp3, B.mp3, C.mp3)
+    // Endpoint para efectos de sonido (SFX locales: A.mp3, B.mp3, C.mp3)
     @GetMapping("/sfx")
     public ResponseEntity<Map<String, String>> getSfx() {
         Map<String, String> sfx = new HashMap<>();
-        sfx.put("intro", "/assets/A.mp3");  // Sonido de intro arcade
+        sfx.put("intro", "/assets/A.mp3");  // Sonido de intro/apertura arcade
         sfx.put("nav", "/assets/B.mp3");    // Sonido al rotar/cambiar personaje
         sfx.put("select", "/assets/C.mp3"); // Sonido al confirmar selección (VS)
         return ResponseEntity.ok(sfx);
     }
 
-    // Endpoint para obtener la lista de los 10 personajes del selector arcade
+    // Endpoint para obtener la lista de los 10 personajes usando assets locales
     @GetMapping("/characters")
     public ResponseEntity<List<Character>> getCharacters() {
         List<Character> characters = Arrays.asList(
-            new Character("kyo", "Kyo Kusanagi", "#ffcc00", "https://i.ibb.co/K1gG66D/Dise-o-sin-t-tulo-2.png", "/assets/voices/kyo.mp3"),
-            new Character("rugal", "Rugal Bernstein", "#00e5ff", "https://i.ibb.co/TBBmMtrZ/Dise-o-sin-t-tulo-3.png", "/assets/voices/rugal.mp3"),
-            new Character("kula", "Kula Diamond", "#ff3366", "https://i.ibb.co/RGwBVR6C/Dise-o-sin-t-tulo-4.png", "/assets/voices/kula.mp3"),
-            new Character("chris", "Orochi Chris", "#cc33ff", "https://i.ibb.co/tT9TtC2v/Dise-o-sin-t-tulo-9.png", "/assets/voices/chris.mp3"),
-            new Character("rock", "Rock Howard", "#00ffcc", "https://i.ibb.co/yc474VCs/Dise-o-sin-t-tulo-11.png", "/assets/voices/rock.mp3"),
-            new Character("terry", "Terry Bogard", "#ff9900", "https://i.ibb.co/Q3bx92nJ/Dise-o-sin-t-tulo-7.png", "/assets/voices/terry.mp3"),
-            new Character("mary", "Blue Mary", "#33ff66", "https://i.ibb.co/GvkJT2Cd/Dise-o-sin-t-tulo-10.png", "/assets/voices/mary.mp3"),
-            new Character("mai", "Mai Shiranui", "#ff33cc", "https://i.ibb.co/k2WG43vk/Dise-o-sin-t-tulo-5.png", "/assets/voices/mai.mp3"),
-            new Character("leona", "Leona Heidern", "#33ccff", "https://i.ibb.co/4wyYJXGW/Dise-o-sin-t-tulo-8.png", "/assets/voices/leona.mp3"),
-            new Character("iori", "Iori Yagami", "#ff3333", "https://i.ibb.co/3Y9yw4z3/Dise-o-sin-t-tulo-6.png", "/assets/voices/iori.mp3")
+            new Character("kyo", "Kyo Kusanagi", "#ffcc00", "/assets/images/kyo.png", "/assets/voices/kyo.mp3"),
+            new Character("rugal", "Rugal Bernstein", "#00e5ff", "/assets/images/rugal.png", "/assets/voices/rugal.mp3"),
+            new Character("kula", "Kula Diamond", "#ff3366", "/assets/images/kula.png", "/assets/voices/kula.mp3"),
+            new Character("chris", "Orochi Chris", "#cc33ff", "/assets/images/chris.png", "/assets/voices/chris.mp3"),
+            new Character("rock", "Rock Howard", "#00ffcc", "/assets/images/rock.png", "/assets/voices/rock.mp3"),
+            new Character("terry", "Terry Bogard", "#ff9900", "/assets/images/terry.png", "/assets/voices/terry.mp3"),
+            new Character("mary", "Blue Mary", "#33ff66", "/assets/images/mary.png", "/assets/voices/mary.mp3"),
+            new Character("mai", "Mai Shiranui", "#ff33cc", "/assets/images/mai.png", "/assets/voices/mai.mp3"),
+            new Character("leona", "Leona Heidern", "#33ccff", "/assets/images/leona.png", "/assets/voices/leona.mp3"),
+            new Character("iori", "Iori Yagami", "#ff3333", "/assets/images/iori.png", "/assets/voices/iori.mp3")
         );
         return ResponseEntity.ok(characters);
     }
