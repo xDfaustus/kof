@@ -636,7 +636,6 @@
 
     <!-- EFECTOS DE SONIDO DE ARCHIVO -->
     <audio src="assets/A.mp3" class="sfx" id="sfxIntro" preload="auto"></audio>
-    <audio src="assets/C.mp3" class="sfx" id="sfxSelect" preload="auto"></audio>
     <!-- REPRODUCTOR DE VOZ / NARRADOR DE PERSONAJE -->
     <audio id="sfxVoice" preload="auto"></audio>
 
@@ -770,9 +769,8 @@
         nextTrackBtn.addEventListener('click', nextTrack);
         document.getElementById('trackIcon').addEventListener('click', nextTrack);
 
-        // 2. EFECTOS DE SONIDO Y SINTETIZADOR DE NAVEGACIÓN
+        // 2. EFECTOS DE SONIDO Y NARRADOR
         const sfxIntro = document.getElementById('sfxIntro');
-        const sfxSelect = document.getElementById('sfxSelect');
         const sfxVoice = document.getElementById('sfxVoice');
 
         function playSfx(audioElement) {
@@ -781,14 +779,9 @@
             audioElement.play().catch(e => {});
         }
 
-        // Función para reproducir la voz/narrador del personaje (evita saturación)
+        // Reproduce la voz del personaje directamente
         function playCharacterVoice(voicePath) {
             if (!voicePath) return;
-            
-            // Si la voz actual todavía se está reproduciendo, ignorar la nueva llamada para no saturar
-            if (!sfxVoice.paused && sfxVoice.currentTime > 0) {
-                return;
-            }
 
             sfxVoice.src = voicePath;
             sfxVoice.currentTime = 0;
@@ -825,11 +818,6 @@
             } catch(e) {}
         }
 
-        // Audio C para la confirmación al pulsar en la tarjeta central
-        function playSelectConfirmSound() {
-            playSfx(sfxSelect);
-        }
-
         // 3. CARRUSEL Y ANIMACIÓN INICIAL AL CARGAR
         let currentIndex = 0;
         let lastNavTime = 0;
@@ -863,7 +851,7 @@
 
             indicesToShow.forEach(item => {
                 const c = characters[item.idx];
-                const slot = document.createElement('div');
+                slot = document.createElement('div');
                 slot.className = `card-slot ${item.pos}`;
 
                 let indicatorHtml = '';
@@ -884,13 +872,14 @@
                     </div>
                 `;
 
-                // Un Clic: Selección normal (Sonido C.mp3 y asignación a P1/P2)
+                // Al hacer clic en la tarjeta central: Reproduce la voz del personaje directamente (/assets/voices/personaje.mp3)
                 slot.addEventListener('click', () => {
                     if (isOpeningAnimating) return;
                     if (item.pos === 'center') {
-                        playSelectConfirmSound(); // Activa assets/C.mp3
+                        // Reproducir sonido de voz directamente del objeto del personaje
+                        playCharacterVoice(c.voice);
                         
-                        // Asignación secuencial de Player 1 y luego Player 2
+                        // Asignación de Player 1 y Player 2
                         if (!player1Char) {
                             player1Char = c;
                             currentSelectingPlayer = 2;
@@ -901,19 +890,8 @@
                         renderCarousel();
                     } else {
                         currentIndex = item.idx;
-                        playSyntheticNavSound(); // Sonido sintético arcade
+                        playSyntheticNavSound();
                         renderCarousel();
-                    }
-                });
-
-                // Doble Clic: Reproduce la voz del narrador inmediatamente después de C.mp3
-                slot.addEventListener('dblclick', () => {
-                    if (isOpeningAnimating) return;
-                    if (item.pos === 'center') {
-                        playSelectConfirmSound(); // C.mp3
-                        setTimeout(() => {
-                            playCharacterVoice(c.voice); // /assets/voices/[personaje].mp3
-                        }, 250);
                     }
                 });
 
@@ -940,7 +918,7 @@
         function runOpeningShowcase() {
             playSfx(sfxIntro);
             let count = 0;
-            const totalSteps = 12; // Número de saltos aleatorios durante la intro
+            const totalSteps = 12;
             const intervalTime = 110;
 
             const randomIndices = Array.from({ length: totalSteps }, () => 
@@ -949,7 +927,7 @@
 
             const showcaseInterval = setInterval(() => {
                 currentIndex = randomIndices[count];
-                playSyntheticNavSound(); // Sonido sintético arcade en cada cambio
+                playSyntheticNavSound();
                 renderCarousel();
                 count++;
 
