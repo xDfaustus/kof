@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -636,21 +636,22 @@
 
     <!-- EFECTOS DE SONIDO DE ARCHIVO -->
     <audio src="assets/A.mp3" class="sfx" id="sfxIntro" preload="auto"></audio>
-    <!-- REPRODUCTOR DE VOZ / NARRADOR DE PERSONAJE -->
+    <audio src="assets/C.mp3" class="sfx" id="sfxSelect" preload="auto"></audio>
+    <!-- REPRODUCTOR DE VOZ LOCAL DE PERSONAJE -->
     <audio id="sfxVoice" preload="auto"></audio>
 
     <script>
         const characters = [
-            { id: "kyo", name: "Kyo Kusanagi", color: "#ffcc00", img: "https://i.ibb.co/K1gG66D/Dise-o-sin-t-tulo-2.png", voice: "/assets/voices/kyo.mp3" },
-            { id: "rugal", name: "Rugal Bernstein", color: "#00e5ff", img: "https://i.ibb.co/TBBmMtrZ/Dise-o-sin-t-tulo-3.png", voice: "/assets/voices/rugal.mp3" },
-            { id: "kula", name: "Kula Diamond", color: "#ff3366", img: "https://i.ibb.co/RGwBVR6C/Dise-o-sin-t-tulo-4.png", voice: "/assets/voices/kula.mp3" },
-            { id: "chris", name: "Orochi Chris", color: "#cc33ff", img: "https://i.ibb.co/tT9TtC2v/Dise-o-sin-t-tulo-9.png", voice: "/assets/voices/chris.mp3" },
-            { id: "rock", name: "Rock Howard", color: "#00ffcc", img: "https://i.ibb.co/yc474VCs/Dise-o-sin-t-tulo-11.png", voice: "/assets/voices/rock.mp3" },
-            { id: "terry", name: "Terry Bogard", color: "#ff9900", img: "https://i.ibb.co/Q3bx92nJ/Dise-o-sin-t-tulo-7.png", voice: "/assets/voices/terry.mp3" },
-            { id: "mary", name: "Blue Mary", color: "#33ff66", img: "https://i.ibb.co/GvkJT2Cd/Dise-o-sin-t-tulo-10.png", voice: "/assets/voices/mary.mp3" },
-            { id: "mai", name: "Mai Shiranui", color: "#ff33cc", img: "https://i.ibb.co/k2WG43vk/Dise-o-sin-t-tulo-5.png", voice: "/assets/voices/mai.mp3" },
-            { id: "leona", name: "Leona Heidern", color: "#33ccff", img: "https://i.ibb.co/4wyYJXGW/Dise-o-sin-t-tulo-8.png", voice: "/assets/voices/leona.mp3" },
-            { id: "iori", name: "Iori Yagami", color: "#ff3333", img: "https://i.ibb.co/3Y9yw4z3/Dise-o-sin-t-tulo-6.png", voice: "/assets/voices/iori.mp3" }
+            { id: "kyo", name: "Kyo Kusanagi", color: "#ffcc00", img: "https://i.ibb.co/K1gG66D/Dise-o-sin-t-tulo-2.png", voice: "assets/voices/kyo.mp3" },
+            { id: "rugal", name: "Rugal Bernstein", color: "#00e5ff", img: "https://i.ibb.co/TBBmMtrZ/Dise-o-sin-t-tulo-3.png", voice: "assets/voices/rugal.mp3" },
+            { id: "kula", name: "Kula Diamond", color: "#ff3366", img: "https://i.ibb.co/RGwBVR6C/Dise-o-sin-t-tulo-4.png", voice: "assets/voices/kula.mp3" },
+            { id: "chris", name: "Orochi Chris", color: "#cc33ff", img: "https://i.ibb.co/tT9TtC2v/Dise-o-sin-t-tulo-9.png", voice: "assets/voices/chris.mp3" },
+            { id: "rock", name: "Rock Howard", color: "#00ffcc", img: "https://i.ibb.co/yc474VCs/Dise-o-sin-t-tulo-11.png", voice: "assets/voices/rock.mp3" },
+            { id: "terry", name: "Terry Bogard", color: "#ff9900", img: "https://i.ibb.co/Q3bx92nJ/Dise-o-sin-t-tulo-7.png", voice: "assets/voices/terry.mp3" },
+            { id: "mary", name: "Blue Mary", color: "#33ff66", img: "https://i.ibb.co/GvkJT2Cd/Dise-o-sin-t-tulo-10.png", voice: "assets/voices/mary.mp3" },
+            { id: "mai", name: "Mai Shiranui", color: "#ff33cc", img: "https://i.ibb.co/k2WG43vk/Dise-o-sin-t-tulo-5.png", voice: "assets/voices/mai.mp3" },
+            { id: "leona", name: "Leona Heidern", color: "#33ccff", img: "https://i.ibb.co/4wyYJXGW/Dise-o-sin-t-tulo-8.png", voice: "assets/voices/leona.mp3" },
+            { id: "iori", name: "Iori Yagami", color: "#ff3333", img: "https://i.ibb.co/3Y9yw4z3/Dise-o-sin-t-tulo-6.png", voice: "assets/voices/iori.mp3" }
         ];
 
         // LÓGICA DE SELECCIÓN DE JUGADORES (P1 Y P2)
@@ -690,7 +691,8 @@
             }
         }
 
-        resetVsBtn.addEventListener('click', () => {
+        resetVsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             player1Char = null;
             player2Char = null;
             currentSelectingPlayer = 1;
@@ -769,8 +771,9 @@
         nextTrackBtn.addEventListener('click', nextTrack);
         document.getElementById('trackIcon').addEventListener('click', nextTrack);
 
-        // 2. EFECTOS DE SONIDO Y NARRADOR
+        // 2. EFECTOS DE SONIDO Y NARRADOR LOCAL
         const sfxIntro = document.getElementById('sfxIntro');
+        const sfxSelect = document.getElementById('sfxSelect');
         const sfxVoice = document.getElementById('sfxVoice');
 
         function playSfx(audioElement) {
@@ -779,13 +782,18 @@
             audioElement.play().catch(e => {});
         }
 
-        // Reproduce la voz del personaje directamente
-        function playCharacterVoice(voicePath) {
-            if (!voicePath) return;
+        // Reproduce el asset MP3 local directamente
+        function playCharacterVoice(voiceSrc) {
+            if (!voiceSrc) return;
+            
+            // Si la voz actual sigue reproduciéndose, no saturar
+            if (!sfxVoice.paused && sfxVoice.currentTime > 0) {
+                return;
+            }
 
-            sfxVoice.src = voicePath;
+            sfxVoice.src = voiceSrc;
             sfxVoice.currentTime = 0;
-            sfxVoice.play().catch(e => console.log("Error al reproducir voz:", e));
+            sfxVoice.play().catch(e => console.log("No se pudo reproducir la voz local:", voiceSrc, e));
         }
 
         let audioCtx = null;
@@ -851,14 +859,14 @@
 
             indicesToShow.forEach(item => {
                 const c = characters[item.idx];
-                slot = document.createElement('div');
+                const slot = document.createElement('div');
                 slot.className = `card-slot ${item.pos}`;
 
                 let indicatorHtml = '';
-                if (player1Char && player1Char.name === c.name) {
+                if (player1Char && player1Char.id === c.id) {
                     indicatorHtml += `<div class="card-p1-indicator">P1</div>`;
                 }
-                if (player2Char && player2Char.name === c.name) {
+                if (player2Char && player2Char.id === c.id) {
                     indicatorHtml += `<div class="card-p2-indicator">P2</div>`;
                 }
 
@@ -872,18 +880,21 @@
                     </div>
                 `;
 
-                // Al hacer clic en la tarjeta central: Reproduce la voz del personaje directamente (/assets/voices/personaje.mp3)
+                // Al hacer clic en la tarjeta central: reproduce el asset local de voz y C.mp3
                 slot.addEventListener('click', () => {
                     if (isOpeningAnimating) return;
                     if (item.pos === 'center') {
-                        // Reproducir sonido de voz directamente del objeto del personaje
+                        // Reproduce efecto de selección C.mp3
+                        playSfx(sfxSelect);
+
+                        // Reproduce el asset de voz local del personaje
                         playCharacterVoice(c.voice);
                         
                         // Asignación de Player 1 y Player 2
                         if (!player1Char) {
                             player1Char = c;
                             currentSelectingPlayer = 2;
-                        } else if (!player2Char && c.name !== player1Char.name) {
+                        } else if (!player2Char && c.id !== player1Char.id) {
                             player2Char = c;
                         }
                         updateVsDisplay();
